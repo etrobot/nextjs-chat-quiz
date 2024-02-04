@@ -1,9 +1,7 @@
-import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
-
+import { kv } from '@vercel/kv'
+import { type Chat } from '@/lib/types'
 import { formatDate } from '@/lib/utils'
-import { getSharedChat } from '@/app/actions'
-import { ChatList } from '@/components/chat-list'
 import { FooterText } from '@/components/footer'
 import Quiz from '@/components/quiz'
 interface SharePageProps {
@@ -12,18 +10,9 @@ interface SharePageProps {
   }
 }
 
-export async function generateMetadata({
-  params
-}: SharePageProps): Promise<Metadata> {
-  const chat = await getSharedChat(params.id)
-
-  return {
-    title: chat?.title.slice(0, 50) ?? 'Chat'
-  }
-}
 
 export default async function SharePage({ params }: SharePageProps) {
-  const chat = await getSharedChat(params.id)
+  const chat = await kv.hgetall<Chat>(`chat:${params.id}`)
 
   if (!chat || !chat?.sharePath) {
     notFound()

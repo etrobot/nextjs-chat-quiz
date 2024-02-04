@@ -76,3 +76,33 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+button{
+  @apply border border-gray-300 rounded-md p-2 m-1
+}
+
+button[disabled] {
+  @apply border border-gray-300 rounded-md p-2 m-1;
+  opacity: 0.4;
+}
+
+.center{
+  @apply text-center w-full items-center
+}
+
+.right{
+  @apply text-right items-end
+}
+
+.option{
+  @apply w-full
+}
+
+.option.selected {
+  @apply font-bold
+}
+
+.mask {
+  @apply fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center
+}

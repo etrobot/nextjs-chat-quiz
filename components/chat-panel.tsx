@@ -58,6 +58,13 @@ export function ChatPanel({
                   <IconRefresh className="mr-2" />
                   Regenerate response
                 </Button>
+                <Button
+                  onClick={() => {
+                    window.open(`/share/${id}`, '_blank');
+                  }}
+                >
+                  PLAY
+                </Button>
                 {id && title ? (
                   <>
                     <Button

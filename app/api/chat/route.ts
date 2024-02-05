@@ -23,12 +23,11 @@ const buildGoogleGenAIPrompt = (messages: Message[]) => ({
 export async function POST(req: Request) {
   const json = await req.json()
   const { messages, previewToken } = json
+  var msg = messages
   // Extract the prompt from the body of the request
-  if(messages.length<2){
-    messages.push({role: 'user', 
-    content: `您是游戏化专家。 您非常擅长根据用户示例测验设计测验游戏。\
-     总结用户的示例测验并将其转换为测验游戏设计原则。\
-     几个问题以及相关选项、答案、经验点和跳转,示例『设计一个哄女友的游戏』并以 JSON 格式输出：\[
+  if(msg.length<2){
+    msg=[{role: 'user', 
+    content: `您是游戏化专家。 您非常擅长根据用户示例设计简短的文字冒险游戏,并以 JSON 格式输出,示例『设计一个哄女友的游戏』：[
       {
         "Q": "你知道错了吗?",
         "A": [
@@ -56,19 +55,19 @@ export async function POST(req: Request) {
         ],
         'Exp':[30,10,20]
       }
-    ]，请务必使用该json格式输出，出色完成能得到500美元的额外报酬`+messages[0].content})
+    ]，请务必使用该json Array完整格式输出，环节以问答形式组成，不需要行动环节。出色完成能得到500美元的额外报酬,以下是新任务：`+messages[0].content}]
   }
-
+  console.log(msg)
   const geminiStream = await genAI
     .getGenerativeModel({ model: 'gemini-pro' })
-    .generateContentStream(buildGoogleGenAIPrompt(messages));
+    .generateContentStream(buildGoogleGenAIPrompt(msg));
 
   // Convert the response into a friendly text-stream
   const stream = GoogleGenerativeAIStream(geminiStream,{
     onCompletion: async (completion: string) => {
       // Store the response in KV
-      const title = json.messages[0].content.substring(0, 100)
-      const id = nanoid();
+      const title = json.messages[0].content.substring(0, 100);
+      const id = json.id ?? nanoid();
       const createdAt = Date.now();
       const userId = (await auth())?.user.id;
       const path = `/chat/${id}`
@@ -79,7 +78,7 @@ export async function POST(req: Request) {
         createdAt,
         path,
         messages: [
-          ...messages.slice(0,messages.length-messages.length%2),
+          ...messages,
           {
             content: completion,
             role: 'assistant'

@@ -16,19 +16,22 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
+import { Session } from 'inspector'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
+  userId?:string
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
+export function Chat({ id,userId,initialMessages, className }: ChatProps) {
+  
   const router = useRouter()
   const path = usePathname()
   const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
@@ -56,6 +59,14 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         }
       }
     })
+    useEffect(() => {
+      localStorage.setItem('messages', JSON.stringify(messages));
+    }, [messages]);
+    useEffect(() => {
+      localStorage.setItem('userId', JSON.stringify(userId));
+    }, [userId]);
+  
+  
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>

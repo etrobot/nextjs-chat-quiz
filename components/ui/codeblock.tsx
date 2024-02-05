@@ -2,13 +2,13 @@
 // @see https://github.com/mckaywrigley/chatbot-ui/blob/main/components/Markdown/CodeBlock.tsx
 
 'use client'
-
+import * as React from 'react'
 import { FC, memo } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { coldarkDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
-
+import { ChatEditDialog } from '../chat-edit-dialog'
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
-import { IconCheck, IconCopy, IconDownload } from '@/components/ui/icons'
+import { IconCheck, IconCopy, IconEdit } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -57,35 +57,8 @@ export const generateRandomString = (length: number, lowercase = false) => {
 }
 
 const CodeBlock: FC<Props> = memo(({ language, value }) => {
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false)
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
-
-  const downloadAsFile = () => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    const fileExtension = programmingLanguages[language] || '.file'
-    const suggestedFileName = `file-${generateRandomString(
-      3,
-      true
-    )}${fileExtension}`
-    const fileName = window.prompt('Enter file name' || '', suggestedFileName)
-
-    if (!fileName) {
-      // User pressed cancel on prompt.
-      return
-    }
-
-    const blob = new Blob([value], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.download = fileName
-    link.href = url
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
 
   const onCopy = () => {
     if (isCopied) return
@@ -100,10 +73,10 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
           <Button
             variant="ghost"
             className="hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
-            onClick={downloadAsFile}
+            onClick={() => setEditDialogOpen(true)}
             size="icon"
           >
-            <IconDownload />
+            <IconEdit />
             <span className="sr-only">Download</span>
           </Button>
           <Button
@@ -140,6 +113,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
       >
         {value}
       </SyntaxHighlighter>
+      <ChatEditDialog open={editDialogOpen} onOpenChange={setEditDialogOpen} jsonCode={value} />
     </div>
   )
 })

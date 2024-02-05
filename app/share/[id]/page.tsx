@@ -10,7 +10,6 @@ interface SharePageProps {
   }
 }
 
-
 export default async function SharePage({ params }: SharePageProps) {
   const chat = await kv.hgetall<Chat>(`chat:${params.id}`)
 

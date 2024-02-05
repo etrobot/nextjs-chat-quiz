@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { type UseChatHelpers } from 'ai/react'
-
+import { toast } from 'react-hot-toast'
 import { shareChat } from '@/app/actions'
 import { Button } from '@/components/ui/button'
 import { PromptForm } from '@/components/prompt-form'
@@ -59,8 +59,17 @@ export function ChatPanel({
                   Regenerate response
                 </Button>
                 <Button
-                  onClick={() => {
-                    window.open(`/share/${id}`, '_blank');
+                  onClick={
+                    async () => {
+                      if (id) {
+                        console.log(id);
+                        const result=await shareChat(id);
+                        if (result && 'error' in result) {
+                          toast.error(result.error)
+                          return
+                        }
+                        window.open(`/share/${id}`, '_blank');
+                      } 
                   }}
                 >
                   PLAY

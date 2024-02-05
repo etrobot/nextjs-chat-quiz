@@ -2,8 +2,6 @@
 import Textarea from 'react-textarea-autosize'
 import * as React from 'react'
 import { type DialogProps } from '@radix-ui/react-dialog'
-import { toast } from 'react-hot-toast'
-import { ServerActionResult, type Chat } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,8 +9,6 @@ import {
   DialogContent,
   DialogFooter
 } from '@/components/ui/dialog'
-import { IconSpinner } from '@/components/ui/icons'
-import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 
 interface ChatEditDialogProps extends DialogProps {
   jsonCode: string

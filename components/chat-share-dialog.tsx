@@ -80,7 +80,7 @@ export function ChatShareDialog({
               // @ts-ignore
               startShareTransition(async () => {
                 const result = await shareChat(chat.id)
-
+                console.log(chat.id)
                 if (result && 'error' in result) {
                   toast.error(result.error)
                   return

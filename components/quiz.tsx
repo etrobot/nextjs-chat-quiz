@@ -1,11 +1,19 @@
 "use client"
 import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 
 interface QuizDataInterface {
+  Eps: string;
   Q: string;
   A: [string, string][];
   Exp: number[];
 }
+
 
 type QuizData = QuizDataInterface[];
 
@@ -15,19 +23,6 @@ interface ModalProps {
   selectScore: number | null;
 }
 
-const Modal: React.FC<ModalProps> = ({ show, onClose, selectScore}) => {
-  if (!show) return null;
-  return (
-      <div className="mask">
-          <div className="bg-background p-4 rounded">
-              <p>{selectScore}</p>
-              <button onClick={onClose}>
-                  OK
-              </button>
-          </div>
-      </div>
-  );
-};
 // 定义一个 Quiz 组件，接受 quizdata 作为 props
 const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
   const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: number | null }>({});
@@ -70,11 +65,16 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
   };
   return (
     <main>
-    <Modal show={showModal} onClose={() => setShowModal(false)} selectScore={selectScore} />
+    <Dialog open={showModal} onOpenChange={setShowModal}>
+    <DialogContent>
+          <DialogHeader><DialogTitle>GOT EXP</DialogTitle></DialogHeader>
+        {selectScore}
+      </DialogContent>
+      </Dialog>
       {quizdata ? (
         totalScore === null ? (
           <div key={currentQuestion}>
-            <p>{quizdata[currentQuestion].Q}</p>
+            <p>{quizdata[currentQuestion].Eps+':'+quizdata[currentQuestion].Q}</p>
             <div>
               {quizdata[currentQuestion].A.map(([choiceText, nextStep], index) => (
                 <button

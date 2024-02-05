@@ -28,6 +28,7 @@ export default async function SharePage({ params }: SharePageProps) {
   }
 
   interface QuizDataInterface {
+    Eps:string;
     Q: string;
     A: [string, string][];
     Exp: number[];

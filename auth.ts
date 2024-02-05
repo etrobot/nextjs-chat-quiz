@@ -23,13 +23,13 @@ export const {
         access_type: "offline",
         response_type: "code"
       }
-    }
+    },
   })],
   callbacks: {
     jwt({ token, profile }) {
       if (profile) {
-        token.id = profile.email
-        token.image = profile.picture
+        token.id = profile.sub
+        token.image = profile.picture.replace('&s=60','')
       }
       return token
     },

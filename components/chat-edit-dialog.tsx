@@ -44,7 +44,6 @@ export function ChatEditDialog({
           <Button
             onClick={async () => {
               const storedMessages = localStorage.getItem('messages');
-              console.log(storedMessages)
               if (storedMessages) {
                 const messages = JSON.parse(storedMessages);
                 const title=messages[0].content.substring(0, 100);

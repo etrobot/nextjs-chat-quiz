@@ -58,12 +58,12 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
 
   const calculateScore = () => {
     let score = 0;
-    Object.entries(setSelectedOptions).forEach(([questionNumber, selectedChoice]) => {
-      const question = quizdata && quizdata[parseInt(questionNumber)];
-      if (question) {
-        score+=question.Exp[selectedChoice];
+    for (let i = 0; i < Object.keys(quizdata).length; i++) {
+      const selectedChoice = selectedOptions[i];
+      if (selectedChoice != undefined && quizdata) {
+        score += quizdata[i].Exp[selectedChoice];
       }
-    });
+    }
     setTotalScore(score);
   };
   return (

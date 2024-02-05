@@ -48,10 +48,12 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
     const selectedChoice = selectedOptions[currentQuestion];
     if (selectedChoice != undefined && quizdata) {
       setSelectScore(quizdata[currentQuestion].Exp[selectedChoice]);
-      setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-      }, 1000);
+      if(quizdata[currentQuestion].Exp[selectedChoice]!==0){
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+        }, 1000);
+      }
     }
     setCurrentQuestion(Math.min(quizdata ? Object.keys(quizdata).length-1 : 0, currentQuestion + 1));
   };

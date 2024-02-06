@@ -14,7 +14,6 @@ interface QuizDataInterface {
   Exp: number[];
 }
 
-
 type QuizData = QuizDataInterface[];
 
 interface ModalProps {
@@ -22,6 +21,7 @@ interface ModalProps {
   onClose: () => void;
   selectScore: number | null;
 }
+
 
 // 定义一个 Quiz 组件，接受 quizdata 作为 props
 const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
@@ -39,6 +39,15 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
     setCurrentQuestion(Math.max(0, currentQuestion - 1));
   };
 
+  function findEpsIndex(quizData: QuizData, targetEps: string): number {
+    for (let i = 0; i < quizData.length; i++) {
+      const eps = quizData[i].Eps;
+      if (eps === targetEps) {
+        return i;
+      }
+    }
+    return -1; // 如果未找到目标eps，则返回-1表示未找到
+  }
   const goToNextQuestion = () => {
     const selectedChoice = selectedOptions[currentQuestion];
     if (selectedChoice != undefined && quizdata) {
@@ -48,6 +57,11 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
         setTimeout(() => {
           setShowModal(false);
         }, 1000);
+      }
+      const epsIndex = findEpsIndex(quizdata, quizdata[currentQuestion].Eps);
+      if(epsIndex!=-1){
+        setCurrentQuestion(epsIndex+1);
+        return
       }
     }
     setCurrentQuestion(Math.min(quizdata ? Object.keys(quizdata).length-1 : 0, currentQuestion + 1));
@@ -68,7 +82,7 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
     <Dialog open={showModal} onOpenChange={setShowModal}>
     <DialogContent>
           <DialogHeader><DialogTitle>GOT EXP</DialogTitle></DialogHeader>
-        {selectScore}
+        <p className='w-full text-center my-8 font-bold text-2xl'>{selectScore}</p>
       </DialogContent>
       </Dialog>
       {quizdata ? (

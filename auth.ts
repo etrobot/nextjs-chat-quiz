@@ -29,7 +29,7 @@ export const {
     jwt({ token, profile }) {
       if (profile) {
         token.id = profile.sub
-        token.image = profile.picture.replace('&s=60','')
+        token.image = profile.picture
       }
       return token
     },

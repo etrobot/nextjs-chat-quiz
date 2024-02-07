@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   const stream = GoogleGenerativeAIStream(geminiStream,{
     onCompletion: async (completion: string) => {
       // Store the response in KV
-      const title = json.messages[0].content.substring(0, 100);
+      const title = json.messages[0].content.substring(0, 120);
       const id = json.id ?? nanoid();
       const createdAt = Date.now();
       const userId = (await auth())?.user.id;
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
         messages: [
           ...messages,
           {
-            content:completion,
+            content:completion.replace(/，/g, ','),
             role: 'assistant'
           }
         ]

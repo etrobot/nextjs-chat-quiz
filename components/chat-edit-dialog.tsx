@@ -54,7 +54,7 @@ export function ChatEditDialog({
                   messages: [
                     ...messages.slice(0,-1),
                     {
-                      content: "```json\n" + editedTxt+"\n```",
+                      content: "```json\n" + editedTxt.replace(/，/g, ',')+"\n```",
                       role: 'assistant'
                     }
                   ]

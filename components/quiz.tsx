@@ -88,7 +88,8 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
       {quizdata ? (
         totalScore === null ? (
           <div key={currentQuestion}>
-            <p>{quizdata[currentQuestion].Eps+':'+quizdata[currentQuestion].Q}</p>
+            <p className='my-2 w-full text-center'>{quizdata[currentQuestion].Eps}</p>
+            <p className='my-4 w-full text-center font-bold'>{quizdata[currentQuestion].Q}</p>
             <div>
               {quizdata[currentQuestion].A.map(([choiceText, nextStep], index) => (
                 <button
@@ -120,7 +121,8 @@ const Quiz = ({ quizdata }: { quizdata: QuizData }) => {
           </div>
         ) : (
           <div>
-         <p className='center'>Total Score: {totalScore}</p>
+         <p className='center font-bold'>Total Score</p>
+         <p className='center font-bold text-3xl my-8'>{totalScore}</p>
             </div>
         )
       ) : (
